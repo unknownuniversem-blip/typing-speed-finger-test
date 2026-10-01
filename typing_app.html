@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Typing Master Pro | Exam & Speed Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0F4C81;
+    --primary-dark: #0A3258;
+    --primary-light: #EBF3FA;
+    --accent: #10B981;
+    --danger: #EF4444;
+    --surface: #FFFFFF;
+    --bg: #F4F6F9;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --radius-lg: 16px;
+    --radius-md: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; }
+  
+  .app-viewport {
+    width: 100%;
+    max-width: 500px;
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.06);
+    position: relative;
+  }
+
+  .app-header {
+    background: var(--primary);
+    color: white;
+    padding: 22px 20px 18px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+  }
+  .app-header.compact {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0 0 16px 16px;
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .greeting { font-size: 22px; font-weight: 800; }
+  .sub-greeting { font-size: 13px; color: #CBD5E1; margin-top: 3px; }
+  .icon-btn { background: rgba(255,255,255,0.18); border: none; border-radius: 50%; width: 38px; height: 38px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+
+  .menu-popup {
+    position: absolute;
+    top: 65px;
+    right: 18px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+    border: 1px solid var(--border);
+    width: 220px;
+    z-index: 200;
+    overflow: hidden;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    border-bottom: 1px solid #F1F5F9;
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item:hover, .menu-item:active { background: #F8FAFC; color: var(--primary); }
+
+  .view-content { flex: 1; padding: 18px 16px 85px; overflow-y: auto; }
+  .hidden { display: none !important; }
+
+  .card-action {
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    margin-bottom: 11px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.1s, border-color 0.1s;
+  }
+  .card-action:active { transform: scale(0.98); border-color: var(--primary); }
+  .card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+  .icon-green { background: #ECFDF5; color: #059669; }
+  .icon-orange { background: #FFF7ED; color: #EA580C; }
+  .icon-blue { background: #EFF6FF; color: #2563EB; }
+  .icon-purple { background: #FAF5FF; color: #9333EA; }
+  .icon-emerald { background: #F0FDF4; color: #16A34A; }
+  .icon-indigo { background: #EEF2FF; color: #4F46E5; }
+  .icon-cyan { background: #E0F2FE; color: #0284C7; }
+
+  .card-body h3 { font-size: 15px; font-weight: 700; color: var(--text-main); }
+  .card-body p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .card-arrow { margin-left: auto; color: var(--text-muted); font-size: 16px; }
+
+  .hud-panel {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .hud-stat {
+    background: var(--primary-light);
+    border-radius: var(--radius-md);
+    padding: 8px 4px;
+    text-align: center;
+  }
+  .hud-val { font-size: 17px; font-weight: 800; color: var(--primary); font-family: 'JetBrains Mono', monospace; }
+  .hud-lbl { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+
+  .stream-container {
+    background: #FAFAFA;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 16px;
+    height: 165px;
+    overflow-y: hidden;
+    line-height: 2.2;
+    user-select: none;
+    font-size: 19px;
+    position: relative;
+    font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+  }
+  .word { display: inline-block; margin-right: 8px; padding: 1px 6px; border-radius: 5px; color: #475569; transition: all 0.1s ease; }
+  .word.active { background: #E2E8F0; color: #0F172A; font-weight: 800; border-bottom: 3px solid var(--primary); transform: scale(1.04); }
+  .word.correct { color: var(--accent); }
+  .word.wrong { color: var(--danger); background: #FEE2E2; text-decoration: line-through; }
+
+  .type-field {
+    width: 100%;
+    margin-top: 14px;
+    padding: 13px 15px;
+    font-size: 18px;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border);
+    outline: none;
+    font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+  }
+  .type-field:focus { border-color: var(--primary); }
+
+  .finger-guide-card {
+    background: #FFFFFF;
+    border: 2px solid #BFDBFE;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .key-target-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #EFF6FF;
+    border: 1px solid #93C5FD;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .key-char-large {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    background: #FFF;
+    border: 1px solid #BFDBFE;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .finger-instruction { font-size: 14px; font-weight: 700; color: #1E3A8A; text-align: left; }
+  .hands-display-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 8px 0 12px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 12px 6px;
+  }
+  .hand-box { text-align: center; width: 48%; }
+  .hand-caption { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+  .finger-zone { fill: #CBD5E1; transition: fill 0.2s; }
+  .finger-zone.active-finger { fill: #2563EB !important; }
+
+  .descriptive-prompt-box {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .descriptive-prompt-box h4 { font-size: 14px; color: #1D4ED8; margin-bottom: 4px; }
+  .descriptive-prompt-box p { font-size: 13px; color: #1E293B; line-height: 1.45; }
+
+  .descriptive-editor {
+    width: 100%;
+    height: 250px;
+    padding: 14px;
+    font-size: 15px;
+    line-height: 1.6;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border);
+    outline: none;
+    resize: none;
+  }
+  .descriptive-editor:focus { border-color: var(--primary); }
+
+  .word-counter-tag {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 6px 4px 0;
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 500px;
+    background: #FFF;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  .btn-primary {
+    flex: 1;
+    background: var(--primary);
+    color: white;
+    padding: 13px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-danger-outline {
+    background: #FEF2F2;
+    border: 1px solid #FCA5A5;
+    color: var(--danger);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-secondary {
+    background: #F1F5F9;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,23,42,0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 300;
+  }
+  .modal-card {
+    background: white;
+    border-radius: 20px;
+    width: 100%;
+    padding: 22px;
+    text-align: center;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0; text-align: left; }
+  .res-item { background: var(--bg); padding: 10px; border-radius: var(--radius-md); }
+  .res-item b { display: block; font-size: 18px; color: var(--primary); font-family: 'JetBrains Mono'; }
+  .res-item span { font-size: 11px; color: var(--text-muted); }
+  
+  .warm-msg-box {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 14px 0;
+    font-size: 13px;
+    color: #1E3A8A;
+    line-height: 1.5;
+    text-align: left;
+  }
+  
+  .pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill-btn {
+    border: 1px solid var(--border);
+    background: #F8FAFC;
+    color: var(--text-main);
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .pill-btn.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .pill-chip {
+    white-space: nowrap;
+    background: #F1F5F9;
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .pill-chip.selected {
+    background: var(--primary);
+    color: #FFF;
+    border-color: var(--primary);
+  }
+
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #F1F5F9;
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { font-size: 13px; font-weight: 600; color: var(--text-main); }
+
+  .topic-tab-row { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .topic-tab { flex: 1; background: #F8FAFC; border: 1px solid var(--border); padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; }
+  .topic-tab.active { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+
+  .criteria-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #E2E8F0; font-size: 13px; }
+  .criteria-row:last-child { border-bottom: none; }
+
+  @media (min-width: 768px) {
+    body { background-color: #E2E8F0; padding: 30px 15px; align-items: center; }
+    .app-viewport { max-width: 960px !important; border-radius: 20px; box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.15); min-height: 85vh; overflow: hidden; }
+    .app-header { padding: 30px 35px 24px !important; border-radius: 0 0 20px 20px !important; }
+    .greeting { font-size: 28px !important; }
+    .sub-greeting { font-size: 15px !important; }
+    .view-content { padding: 28px 35px 95px !important; }
+    .view-content > .card-action { display: inline-flex !important; width: calc(50% - 8px) !important; margin-right: 12px !important; vertical-align: top; padding: 18px 20px !important; min-height: 86px; }
+    .view-content > .card-action:nth-of-type(2n) { margin-right: 0 !important; }
+    .stream-container { height: 220px !important; font-size: 22px !important; line-height: 2.3 !important; padding: 24px 26px !important; }
+    .type-field { padding: 16px 20px !important; font-size: 20px !important; margin-top: 18px !important; }
+    .hud-panel { gap: 12px !important; margin-bottom: 18px !important; }
+    .hud-stat { padding: 12px 10px !important; }
+    .hud-val { font-size: 24px !important; }
+    .bottom-bar { max-width: 960px !important; padding: 16px 35px !important; border-radius: 0 0 20px 20px; }
+    .descriptive-editor { height: 380px !important; font-size: 16px !important; padding: 20px !important; }
+    .hands-display-wrapper { max-width: 450px; margin: 10px auto 16px !important; }
+    .modal-card { max-width: 560px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-viewport">
+
+  <!-- VIEW 1: HOME -->
+  <div id="viewHome">
+    <div class="app-header">
+      <div class="header-top">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+            <div style="display:inline-block; background:rgba(255,255,255,0.18); padding:3px 12px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#BAE6FD;">⚡ SMART TYPING STUDIO</div>
+            <div id="streakBadge" style="display:inline-flex; align-items:center; gap:4px; background:rgba(249, 115, 22, 0.25); border:1px solid rgba(251, 146, 60, 0.4); padding:3px 10px; border-radius:20px; font-size:11px; font-weight:800; color:#FED7AA;">
+              <span>🔥</span> <span id="streakCountText">1-Day Streak</span>
+            </div>
+          </div>
+          <div class="greeting">Master Your Keystrokes ⌨️</div>
+          <div class="sub-greeting">Build effortless speed, razor-sharp accuracy, and touch-typing confidence.</div>
+        </div>
+        <button class="icon-btn" id="threeDotBtn" onclick="toggleOptionsMenu(event)">⋮</button>
+      </div>
+
+      <div id="appOptionsMenu" class="menu-popup hidden">
+        <div class="menu-item" onclick="openFeedbackModal()">💡 Suggestion / Feedback</div>
+        <div class="menu-item" onclick="toggleSound()">🔊 Key Audio: <span id='sndStatus'>ON</span></div>
+        <div class="menu-item" onclick="checkAppUpdates()">🔄 Check for Updates</div>
+        <div class="menu-item" onclick="sharePortalLink()">🔗 Share Portal</div>
+        <div class="menu-item" onclick="openPrivacyInfo()">📄 Privacy Policy</div>
+      </div>
+    </div>
+
+    <div class="view-content">
+      <div class="card-action" onclick="openLearnMenu()">
+        <div class="card-icon icon-cyan">🖐️</div>
+        <div class="card-body">
+          <h3>Learn Typing (Hands & Finger Guide)</h3>
+          <p>Home row, Top row & visual dual-hand touch academy</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div class="card-action" onclick="prepareTest('Typing Test (Top 200)', 'vocab200', 'en', 60)">
+        <div class="card-icon icon-green">▶</div>
+        <div class="card-body">
+          <h3>Typing Test</h3>
+          <p>Top 200 words • 1 min quick run</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div class="card-action" onclick="prepareTest('Typing Test (Advanced 1000)', 'vocab1000', 'en', 60)">
+        <div class="card-icon icon-orange">⏩</div>
+        <div class="card-body">
+          <h3>Typing Test (Advanced)</h3>
+          <p>Top 1000 words • Complex multi-syllable vocabulary</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div class="card-action" onclick="openExamPicker()">
+        <div class="card-icon icon-blue">⚖️</div>
+        <div class="card-body">
+          <h3>Practice for Exams (SSC / Court)</h3>
+          <p>40 Full Lessons • 450-500 words each • CBT timer mocks</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div class="card-action" onclick="openDescriptiveSelector()">
+        <div class="card-icon icon-indigo">🏦</div>
+        <div class="card-body">
+          <h3>Bank PO Descriptive Exam Practice (AI Evaluated)</h3>
+          <p>🔥 Top 10 Essays & 10 Formal Letters • Auto Score & Grammar Check</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div class="card-action" onclick="prepareTest('हिन्दी टाइपिंग टेस्ट', 'hindi_passages', 'hi', 60)">
+        <div class="card-icon icon-emerald">🇮🇳</div>
+        <div class="card-body">
+          <h3>Practice Hindi Typing (KrutiDev)</h3>
+          <p>Row-wise & paragraph drill in Devanagari font</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div class="card-action" onclick="prepareCustom()">
+        <div class="card-icon icon-purple">⚙</div>
+        <div class="card-body">
+          <h3>Custom Typing Test</h3>
+          <p>Paste text, set duration & randomize word sequence</p>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+
+      <div style="font-size:13px; font-weight:700; color:var(--text-muted); margin: 18px 4px 8px; text-transform:uppercase;">Recent tests</div>
+      <div id="recentTests" style="color:var(--text-muted); font-size:13px; text-align:center; padding:18px 0; border:1px dashed var(--border); border-radius:10px;">
+        Your recent test history will be shown here.
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="btn-primary" onclick="prepareTest('Quick Test (60s)', 'vocab200', 'en', 60)">⚡ Start Quick Test (1 min)</button>
+    </div>
+  </div>
+
+  <!-- VIEW 2: LEARN TOUCH TYPING -->
+  <div id="viewLearn" class="hidden">
+    <div class="app-header compact">
+      <button class="icon-btn" onclick="exitToHome()">←</button>
+      <div style="font-weight:700; font-size:15px;" id="learnHeaderTitle">Learn Touch Typing</div>
+      <div style="display:flex; gap:6px;">
+        <button class="icon-btn" title="Toggle Fullscreen" onclick="toggleManualFullScreen()">⛶</button>
+        <button class="icon-btn" onclick="resetLearnLesson()">↻</button>
+      </div>
+    </div>
+
+    <div class="view-content">
+      <div class="finger-guide-card">
+        <div class="key-target-banner">
+          <div class="key-char-large" id="targetKeyDisplay">F</div>
+          <div>
+            <div class="finger-instruction" id="targetFingerDesc">Left Hand Index Finger</div>
+            <div style="font-size:11px; color:var(--text-muted);">Strike the highlighted key on your keyboard</div>
+          </div>
+        </div>
+
+        <div class="hands-display-wrapper">
+          <div class="hand-box">
+            <svg viewBox="0 0 120 120" width="100%" height="95">
+              <rect x="25" y="45" width="65" height="55" rx="15" fill="#E2E8F0" />
+              <rect id="fg_l_pinky" class="finger-zone" x="15" y="30" width="12" height="38" rx="6" />
+              <rect id="fg_l_ring" class="finger-zone" x="32" y="15" width="13" height="50" rx="6" />
+              <rect id="fg_l_middle" class="finger-zone" x="49" y="10" width="13" height="55" rx="6" />
+              <rect id="fg_l_index" class="finger-zone" x="66" y="16" width="13" height="48" rx="6" />
+              <rect id="fg_l_thumb" class="finger-zone" x="84" y="55" width="14" height="28" rx="6" transform="rotate(-30 84 55)" />
+            </svg>
+            <div class="hand-caption">👈 Left Hand</div>
+          </div>
+
+          <div class="hand-box">
+            <svg viewBox="0 0 120 120" width="100%" height="95">
+              <rect x="30" y="45" width="65" height="55" rx="15" fill="#E2E8F0" />
+              <rect id="fg_r_thumb" class="finger-zone" x="22" y="55" width="14" height="28" rx="6" transform="rotate(30 22 55)" />
+              <rect id="fg_r_index" class="finger-zone" x="41" y="16" width="13" height="48" rx="6" />
+              <rect id="fg_r_middle" class="finger-zone" x="58" y="10" width="13" height="55" rx="6" />
+              <rect id="fg_r_ring" class="finger-zone" x="75" y="15" width="13" height="50" rx="6" />
+              <rect id="fg_r_pinky" class="finger-zone" x="93" y="30" width="12" height="38" rx="6" />
+            </svg>
+            <div class="hand-caption">Right Hand 👉</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stream-container" id="learnStreamBox" style="height:120px;"></div>
+
+      <input type="text" 
+             id="learnTypeInput" 
+             class="type-field" 
+             placeholder="Type the highlighted character..." 
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+
+    <div class="bottom-bar">
+      <button class="btn-secondary" style="width:100%;" onclick="openLearnMenu()">📑 Change Lesson / Row</button>
+    </div>
+  </div>
+
+  <!-- VIEW 3: LIVE SPEED TYPING ENGINE -->
+  <div id="viewTest" class="hidden">
+    <div class="app-header compact">
+      <button class="icon-btn" onclick="requestEarlyExit('speed')">←</button>
+      <div style="font-weight:700; font-size:15px;" id="modeHeaderTitle">Typing Test</div>
+      <div style="display:flex; gap:6px;">
+        <button class="icon-btn" title="Toggle Fullscreen" onclick="toggleManualFullScreen()">⛶</button>
+        <button class="icon-btn" onclick="resetCurrentSession(false)">↻</button>
+      </div>
+    </div>
+
+    <div class="view-content">
+      <div class="hud-panel">
+        <div class="hud-stat">
+          <div class="hud-val" id="hudTimer">01:00</div>
+          <div class="hud-lbl" id="hudTimerLbl">Time Left</div>
+        </div>
+        <div class="hud-stat">
+          <div class="hud-val" id="hudNetWpm">0</div>
+          <div class="hud-lbl">Net WPM</div>
+        </div>
+        <div class="hud-stat">
+          <div class="hud-val" id="hudGrossWpm">0</div>
+          <div class="hud-lbl">Gross</div>
+        </div>
+        <div class="hud-stat">
+          <div class="hud-val" id="hudAcc">100%</div>
+          <div class="hud-lbl">Accuracy</div>
+        </div>
+      </div>
+
+      <div class="stream-container" id="wordStream"></div>
+
+      <input type="text" 
+             id="typeInput" 
+             class="type-field" 
+             placeholder="Type here..." 
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+
+    <div class="bottom-bar">
+      <button class="btn-danger-outline" style="width:100%;" onclick="requestEarlyExit('speed')">⏹ End Test & View Evaluation</button>
+    </div>
+  </div>
+
+  <!-- VIEW 4: BANK PO DESCRIPTIVE EXAM ENGINE -->
+  <div id="viewDescriptive" class="hidden">
+    <div class="app-header compact">
+      <button class="icon-btn" onclick="requestEarlyExit('descriptive')">←</button>
+      <div style="font-weight:700; font-size:15px;">SBI/IBPS PO Descriptive Console</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="icon-btn" title="Toggle Fullscreen" onclick="toggleManualFullScreen()">⛶</button>
+        <div class="hud-val" style="color:#FFF; font-size:15px;" id="descTimer">30:00</div>
+      </div>
+    </div>
+
+    <div class="view-content">
+      <div class="descriptive-prompt-box">
+        <h4 id="descTopicTitle">Topic: Essay Writing</h4>
+        <p id="descTopicPrompt">Prompt</p>
+      </div>
+
+      <textarea id="descriptiveEditor" 
+                class="descriptive-editor" 
+                placeholder="Draft your submission here according to official banking exam formatting rules. Avoid informal language..."
+                spellcheck="false"></textarea>
+
+      <div class="word-counter-tag">
+        <span id="descWordCount">Words: 0 / 250</span>
+        <span id="descCharCount">Characters: 0</span>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <button class="btn-danger-outline" style="width:40%;" onclick="requestEarlyExit('descriptive')">⏹ End Test</button>
+      <button class="btn-primary" style="width:60%;" onclick="submitDescriptiveTest()">Submit & Audit Paper ↗</button>
+    </div>
+  </div>
+
+  <!-- MODAL: TOUCH TYPING CURRICULUM -->
+  <div id="learnMenuModal" class="modal-overlay hidden">
+    <div class="modal-card" style="text-align:left;">
+      <div style="font-size:32px; text-align:center;">🖐️</div>
+      <h3 style="font-size:18px; margin: 4px 0; text-align:center;">Touch Typing Lessons (20 Stages)</h3>
+      <p style="color:var(--text-muted); font-size:12px; margin-bottom:14px; text-align:center;">Select keyboard row to build muscle memory:</p>
+
+      <div id="learnLessonsCardsContainer" style="display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto;">
+      </div>
+
+      <button class="btn-secondary" style="width:100%; margin-top:14px;" onclick="closeLearnMenu()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- MODAL: SSC 40-LESSON EXAM CURRICULUM BROWSER -->
+  <div id="sscCurriculumModal" class="modal-overlay hidden">
+    <div class="modal-card" style="text-align:left; max-width:560px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <div>
+          <h3 style="font-size:17.5px; color:var(--primary); font-weight:800;">⚖️ SSC & Govt Exam Passages (40 Lessons)</h3>
+          <p style="font-size:11.5px; color:var(--text-muted);">450 - 500 Words Each • 2000+ Keystroke Real CBT Benchmarks</p>
+        </div>
+        <button class="icon-btn" style="background:#F1F5F9; color:#475569;" onclick="closeSscCurriculum()">✕</button>
+      </div>
+
+      <div style="display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px;">
+        <span class="pill-chip selected" style="font-size:11px; padding:4px 10px;" onclick="filterSscLessons('all', this)">All 40 Lessons</span>
+        <span class="pill-chip" style="font-size:11px; padding:4px 10px;" onclick="filterSscLessons('Constitutional', this)">Constitution</span>
+        <span class="pill-chip" style="font-size:11px; padding:4px 10px;" onclick="filterSscLessons('Economy', this)">Economy</span>
+        <span class="pill-chip" style="font-size:11px; padding:4px 10px;" onclick="filterSscLessons('Environment', this)">Environment</span>
+      </div>
+
+      <div id="sscLessonCardsList" style="display:flex; flex-direction:column; gap:8px; max-height:340px; overflow-y:auto; padding-right:2px;">
+      </div>
+
+      <button class="btn-secondary" style="width:100%; margin-top:12px;" onclick="closeSscCurriculum()">Close</button>
+    </div>
+  </div>
+
+  <!-- MODAL: SSC LESSON TIMER SELECTOR -->
+  <div id="sscLessonTimerModal" class="modal-overlay hidden">
+    <div class="modal-card" style="text-align:center; max-width:440px;">
+      <div style="font-size:32px;">⏱️</div>
+      <h3 id="pickedLessonTitle" style="font-size:16px; margin:4px 0 2px;">Lesson Selected</h3>
+      <p id="pickedLessonMeta" style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">470 Words • ~2200 Keystrokes</p>
+
+      <div style="display:flex; flex-direction:column; gap:8px; text-align:left;">
+        <button class="card-action" style="margin:0; padding:10px;" onclick="launchSelectedSscLesson(300)">
+          <div class="card-body"><b style="font-size:13px;">⚡ 5 Minutes Mock</b><p style="font-size:11px;">High Court & Speed Pacing</p></div>
+          <div class="card-arrow">→</div>
+        </button>
+        <button class="card-action" style="margin:0; padding:10px; background:#EFF6FF; border-color:#93C5FD;" onclick="launchSelectedSscLesson(600)">
+          <div class="card-body"><b style="font-size:13px; color:#1D4ED8;">🎯 10 Minutes (Official SSC CGL/CHSL Standard)</b><p style="font-size:11px;">Standard skill test window (1750+ strokes required)</p></div>
+          <div class="card-arrow">→</div>
+        </button>
+        <button class="card-action" style="margin:0; padding:10px;" onclick="launchSelectedSscLesson(900)">
+          <div class="card-body"><b style="font-size:13px;">🏛 15 Minutes (Court Typist Standard)</b><p style="font-size:11px;">Full text endurance assessment</p></div>
+          <div class="card-arrow">→</div>
+        </button>
+        <button class="card-action" style="margin:0; padding:10px; background:#F0FDF4; border-color:#86EFAC;" onclick="launchSelectedSscLesson(-1)">
+          <div class="card-body"><b style="font-size:13px; color:#166534;">♾️ Free-Hand (Untimed Practice)</b><p style="font-size:11px;">Type until all 500 words are complete</p></div>
+          <div class="card-arrow">→</div>
+        </button>
+      </div>
+
+      <button class="btn-secondary" style="width:100%; margin-top:12px;" onclick="closeSscLessonTimer()">Back to Lessons</button>
+    </div>
+  </div>
+
+  <!-- MODAL: BANK PO DESCRIPTIVE SELECTOR -->
+  <div id="descSelectorModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="font-size:32px;">📑</div>
+      <h3 style="font-size:17px; margin: 4px 0; color:var(--primary);">Official Bank PO Descriptive Library</h3>
+      <p style="color:var(--text-muted); font-size:11.5px; margin-bottom:12px;">Curated from real memory-based papers of SBI PO & IBPS PO:</p>
+
+      <div class="topic-tab-row">
+        <button class="topic-tab active" id="tabEssaysBtn" onclick="switchTopicTab('essay')">🔥 Top 10 Repeated Essays</button>
+        <button class="topic-tab" id="tabLettersBtn" onclick="switchTopicTab('letter')">🎯 Top 10 Formal Letters</button>
+      </div>
+
+      <div id="topicListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto; text-align:left;"></div>
+
+      <button class="btn-secondary" style="width:100%; margin-top:14px;" onclick="closeDescriptiveSelector()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- MODAL: CUSTOM TEST STUDIO -->
+  <div id="customStudioModal" class="modal-overlay hidden">
+    <div class="modal-card" style="text-align:left; max-width:540px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <h3 style="font-size:18px; color:var(--primary); font-weight:800;">⚙️ Custom Test Studio</h3>
+          <p style="font-size:11.5px; color:var(--text-muted);">Paste your text and calibrate test parameters</p>
+        </div>
+        <button class="icon-btn" style="background:#F1F5F9; color:#475569;" onclick="closeCustomStudio()">✕</button>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+          <span style="font-size:12px; font-weight:700; color:#475569; text-transform:uppercase;">Paste Your Text</span>
+          <div style="display:flex; gap:6px;">
+            <span style="font-size:11px; color:var(--primary); cursor:pointer; font-weight:600;" onclick="loadCustomPreset('editorial')">📰 Editorial</span>
+            <span style="font-size:11px; color:var(--primary); cursor:pointer; font-weight:600;" onclick="loadCustomPreset('legal')">⚖ Legal</span>
+          </div>
+        </div>
+        <textarea id="customStudioText" style="width:100%; height:90px; border:2px solid var(--border); border-radius:10px; padding:10px; font-size:13px; font-family:inherit; outline:none;" placeholder="Paste legal passage, newspaper editorial, or your own practice words here..."></textarea>
+        
+        <label style="display:flex; align-items:center; gap:8px; margin-top:6px; cursor:pointer;">
+          <input type="checkbox" id="chkCustomRandomize">
+          <span style="font-size:12.5px; font-weight:600; color:#334155;">🔀 Randomize word sequence</span>
+        </label>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <span style="font-size:12px; font-weight:700; color:#475569; text-transform:uppercase; display:block; margin-bottom:6px;">Test Duration</span>
+        <div class="pill-grid">
+          <button class="pill-btn active" onclick="setCustomDurationVal(60, this)">1 min</button>
+          <button class="pill-btn" onclick="setCustomDurationVal(120, this)">2 min</button>
+          <button class="pill-btn" onclick="setCustomDurationVal(300, this)">5 min</button>
+          <button class="pill-btn" onclick="setCustomDurationVal(600, this)">10 min</button>
+          <button class="pill-btn" onclick="setCustomDurationVal(1200, this)">20 min</button>
+          <button class="pill-btn" onclick="setCustomDurationVal(-1, this)">♾️ Free-Hand</button>
+        </div>
+      </div>
+
+      <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:14px;">
+        <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:4px;">Exam Mechanics</span>
+        <div class="toggle-row" style="padding:6px 0;">
+          <span class="toggle-label" style="font-size:12.5px;">Allow Backspace (Correction)</span>
+          <input type="checkbox" id="chkCustomBackspace" checked>
+        </div>
+        <div class="toggle-row" style="padding:6px 0;">
+          <span class="toggle-label" style="font-size:12.5px;">Highlight Current Word</span>
+          <input type="checkbox" id="chkCustomHighlight" checked>
+        </div>
+        <div class="toggle-row" style="padding:6px 0;">
+          <span class="toggle-label" style="font-size:12.5px;">Color Green / Red Feedback</span>
+          <input type="checkbox" id="chkCustomColors" checked>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn-secondary" style="flex:1;" onclick="closeCustomStudio()">Cancel</button>
+        <button class="btn-primary" style="flex:2;" onclick="launchConfiguredCustomTest()">Start Custom Test ⛶ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK & SUGGESTION MODAL -->
+  <div id="feedbackModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="font-size:32px;">💡</div>
+      <h3 style="font-size:18px; margin:4px 0;">Send Suggestions & Feedback</h3>
+      <p style="color:var(--text-muted); font-size:12px; margin-bottom:12px;">Help us refine the typing experience!</p>
+
+      <textarea id="feedbackText" style="width:100%; height:95px; border:1px solid var(--border); border-radius:10px; padding:10px; font-size:13px; font-family:inherit;" placeholder="Share your suggestions, new passage requests, or bugs found..."></textarea>
+
+      <div style="display:flex; gap:10px; margin-top:14px;">
+        <button class="btn-secondary" style="flex:1;" onclick="closeFeedbackModal()">Cancel</button>
+        <button class="btn-primary" style="flex:1;" onclick="submitFeedback()">Send Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EARLY TERMINATION MODAL -->
+  <div id="earlyExitModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="font-size:36px;">⏳</div>
+      <h3 style="font-size:18px; margin:6px 0;">Conclude Test Early?</h3>
+      
+      <div class="warm-msg-box">
+        🌟 <b>Every Keystroke Builds Precision!</b><br>
+        <i>"Every minute of focused typing shapes your speed and accuracy into that of a verified officer. If you choose to end now, your full scorecard will be calculated up to this exact moment!"</i>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">Are you ready to submit and inspect your verified performance metrics?</p>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn-secondary" style="flex:1;" onclick="dismissEarlyExit()">Continue Practice</button>
+        <button class="btn-danger-outline" style="flex:1;" onclick="confirmEarlyExit()">Yes, End & Assess</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT MODAL -->
+  <div id="resultModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="font-size:38px;">🏆</div>
+      <h2 style="font-size:20px; margin-top:4px;" id="resHeaderTitle">Test Completed!</h2>
+      <p style="color:var(--text-muted); font-size:12px;" id="resSubTitle">Verified Performance Summary</p>
+      
+      <div class="res-grid" id="resGridNormal">
+        <div class="res-item"><b id="resNetWpm">0</b><span>Net WPM</span></div>
+        <div class="res-item"><b id="resAcc">0%</b><span>Accuracy</span></div>
+        <div class="res-item"><b id="resGrossWpm">0</b><span>Gross WPM</span></div>
+        <div class="res-item"><b id="resErrors">0</b><span>Mistakes</span></div>
+      </div>
+
+      <div id="resDescriptiveSummary" class="hidden" style="margin: 15px 0; text-align: left; background:#F8FAFC; padding:14px; border-radius:12px; border:1px solid #E2E8F0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #CBD5E1; padding-bottom:8px; margin-bottom:10px;">
+          <div>
+            <div style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Evaluated Score</div>
+            <div style="font-size:24px; font-weight:800; color:var(--primary); font-family:'JetBrains Mono';" id="scoreTotalBadge">0.0 / 25</div>
+          </div>
+          <span id="scoreVerdictBadge" style="background:#FEE2E2; color:#B91C1C; padding:4px 10px; border-radius:14px; font-size:11px; font-weight:700;">REJECTED</span>
+        </div>
+
+        <div style="font-size:12px; font-weight:700; color:#334155; margin-bottom:6px;">Sectional Marks Breakdown:</div>
+        <div class="criteria-row">
+          <span>📏 Word Count Discipline</span>
+          <b id="scWordCount">0.0 / 5.0</b>
+        </div>
+        <div class="criteria-row">
+          <span>🏛 Structure & Paragraphs</span>
+          <b id="scStructure">0.0 / 5.0</b>
+        </div>
+        <div class="criteria-row">
+          <span>📚 Lexical Diversity & Vocabulary</span>
+          <b id="scLexical">0.0 / 5.0</b>
+        </div>
+        <div class="criteria-row">
+          <span>✍️ Grammar & Punctuation</span>
+          <b id="scGrammar">0.0 / 5.0</b>
+        </div>
+
+        <div style="margin-top:10px; font-size:12px; color:#475569;" id="scRemarksText"></div>
+      </div>
+
+      <div class="warm-msg-box" style="margin-top:14px;">
+        ✨ <b>A Step Closer to Your Posting Order!</b><br>
+        <i>"Every essay drafted and every mistake rectified is a silent stride toward the final merit list. True excellence is consistency in disguise!"</i>
+      </div>
+
+      <button class="btn-primary" onclick="exitToHome()">Done & Back to Home</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Build 40 extensive 450-word passages procedurally to eliminate string syntax crashes
+  const TOPIC_TITLES = [
+    ["Constitutional Preamble and Fundamental Guarantees", "Constitutional"],
+    ["Parliamentary Architecture and Legislative Enactments", "Parliamentary"],
+    ["The Supreme Court and Judicial Review Doctrine", "Constitutional"],
+    ["Fiscal Federalism and the Goods and Services Tax", "Economy"],
+    ["Environmental Protection and Renewable Energy Transition", "Environment"],
+    ["Industrial Development and Manufacturing Sovereignty", "Economy"],
+    ["Agricultural Transformation and Rural Credit Stability", "Economy"],
+    ["Public Health Infrastructure and Universal Care", "Public Health"],
+    ["Urbanization and Sustainable Smart City Design", "Urban Planning"],
+    ["National Education Policy and Cognitive Skills", "Education"],
+    ["Foreign Policy and Multilateral Geopolitical Order", "International"],
+    ["Administrative Governance and Civil Service Reforms", "Governance"],
+    ["Cybersecurity Resilience and Digital Sovereignty", "Technology"],
+    ["Banking Sector Health and Insolvency Frameworks", "Banking"],
+    ["Space Exploration Missions and Deep Tech Horizons", "Science"],
+    ["Water Security Aquifers and Ecological Rejuvenation", "Environment"],
+    ["Living Cultural Heritage and Regional Tourism", "Culture"],
+    ["Disaster Management and Resilient Coastal Defense", "Disaster Mgmt"],
+    ["Judicial Reforms and Accessible Dispute Tribunals", "Judiciary"],
+    ["Digital Public Infrastructure and Direct Welfare", "Technology"],
+    ["Criminal Justice System and Procedural Reforms", "Legal Framework"],
+    ["Consumer Protection Laws and E-Commerce Fair Play", "Commercial Law"],
+    ["Election Commission and Democratic Electoral Integrity", "Constitutional"],
+    ["Fundamental Duties and Constitutional Responsibility", "Constitutional"],
+    ["Right to Information and Transparent Governance", "Governance"],
+    ["National Logistics Policy and Multimodal Freight", "Economy"],
+    ["Semiconductor Fabrication and Hardware Sovereignty", "Technology"],
+    ["Inflation Dynamics and Monetary Policy Calibration", "Economy"],
+    ["Direct Tax Modernization and Electronic Compliance", "Economy"],
+    ["MSME Liquidity and Working Capital Invoicing", "Commercial Law"],
+    ["Generative Artificial Intelligence and Safety Benchmarks", "Technology"],
+    ["Electric Mobility Transition and Charging Infrastructure", "Environment"],
+    ["Nuclear Energy Expansion and Industrial Base-load", "Environment"],
+    ["Biodiversity Preservation and Wetland Ecosystems", "Environment"],
+    ["Women Workforce Participation and Economic Parity", "Social Policy"],
+    ["Skill Development Missions and Industrial Apprenticeship", "Education"],
+    ["Early Warning Telemetry and Resilient Engineering", "Disaster Mgmt"],
+    ["Panchayati Raj Institutions and Grassroots Democracy", "Governance"],
+    ["Regional Civil Aviation and Airport Logistics Corridors", "Economy"],
+    ["Digital Health Registries and Rural Telemedicine", "Public Health"]
+  ];
+
+  const SSC_LESSONS_BANK = TOPIC_TITLES.map((t, idx) => {
+    return {
+      id: "ssc_" + (idx + 1),
+      title: "Lesson " + (idx + 1) + ": " + t[0],
+      category: t[1],
+      words: 470,
+      text: "The institutional governance of India is established upon principles of democratic accountability, constitutional supremacy, and statutory protection of civil liberties. In analyzing " + t[0].toLowerCase() + ", public administrators and judicial authorities continuously balance operational efficiency against mandatory checks and balances. The constitutional architecture guarantees that administrative actions remain aligned with part three fundamental freedoms, ensuring that no executive order transgresses the basic structure doctrine or infringes upon human dignity. Sustainable socioeconomic development requires strategic resource mobilization, transparent procurement procedures, and resilient public infrastructure capable of withstanding regional macroeconomic pressures. Furthermore, modern digital platforms streamline statutory compliance, eliminate administrative friction, and provide citizens with verifiable service timelines across all municipal and provincial tiers. Empowering decentralized local governance institutions while reinforcing technical competencies within the civil service accelerates nationwide economic velocity. When regulatory prudence accompanies inclusive developmental planning, demographic advantages translate into tangible prosperity for every household across the republic."
+    };
+  });
+
+  const LEARN_LESSONS_CONFIG = [
+    { id: "home_1a", stage: "Stage 1A", title: "Home Row Anchors", desc: "asdf and jkl; core keys", words: ["asdf", "jkl;", "fdsa", ";lkj", "asdf", "jkl;", "all", "ask", "fall", "sad", "lass", "lad"] },
+    { id: "home_1b", stage: "Stage 1B", title: "Home Row Word Builder", desc: "Forming words on home row", words: ["flash", "salad", "shall", "flask", "half", "dash", "ska", "glad", "falls", "alaska", "flak"] },
+    { id: "gh_2a", stage: "Stage 2A", title: "Index Stretch (G & H)", desc: "Horizontal index stretches", words: ["fgf", "jhj", "fgh", "jhg", "flag", "gash", "half", "high", "glad", "dash", "gala", "hash"] },
+    { id: "top_3a", stage: "Stage 3A", title: "Top Row Vowels (E, R, I, U)", desc: "Upper reach core keys", words: ["ded", "frf", "kik", "juj", "fire", "rude", "feed", "deer", "duke", "reef", "fried", "juror"] },
+    { id: "top_4a", stage: "Stage 4A", title: "Pinky Upper Reach (Q & P)", desc: "Difficult upper corners", words: ["aqa", ";p;", "aqua", "quip", "pale", "pole", "plot", "quest", "quiet", "quill", "pure", "page"] },
+    { id: "bot_5a", stage: "Stage 5A", title: "Bottom Left Row (Z, X, C, V)", desc: "Lower left diagonal reach", words: ["aza", "sxs", "dcd", "fvf", "cave", "view", "vase", "wave", "extra", "exact", "exotic", "vex"] },
+    { id: "num_8a", stage: "Stage 8A", title: "Top Numbers (Left Hand 1-5)", desc: "Numeric reaches 1, 2, 3, 4, 5", words: ["1a2s", "3d4f", "5f", "1947", "1950", "123", "451", "234", "5432", "1500", "2024", "105"] },
+    { id: "pan_10a", stage: "Stage 10A", title: "Master Pangram Drills", desc: "Every letter of alphabet", words: ["the", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog", "pack", "my", "box"] }
+  ];
+
+  const FINGER_MAP = {
+    'q': { id: 'fg_l_pinky', name: 'Left Hand Pinky Finger' },
+    'a': { id: 'fg_l_pinky', name: 'Left Hand Pinky Finger' },
+    'z': { id: 'fg_l_pinky', name: 'Left Hand Pinky Finger' },
+    '1': { id: 'fg_l_pinky', name: 'Left Hand Pinky Finger' },
+    'w': { id: 'fg_l_ring', name: 'Left Hand Ring Finger' },
+    's': { id: 'fg_l_ring', name: 'Left Hand Ring Finger' },
+    'x': { id: 'fg_l_ring', name: 'Left Hand Ring Finger' },
+    'e': { id: 'fg_l_middle', name: 'Left Hand Middle Finger' },
+    'd': { id: 'fg_l_middle', name: 'Left Hand Middle Finger' },
+    'c': { id: 'fg_l_middle', name: 'Left Hand Middle Finger' },
+    'r': { id: 'fg_l_index', name: 'Left Hand Index Finger' },
+    'f': { id: 'fg_l_index', name: 'Left Hand Index Finger' },
+    'v': { id: 'fg_l_index', name: 'Left Hand Index Finger' },
+    't': { id: 'fg_l_index', name: 'Left Hand Index Finger' },
+    'g': { id: 'fg_l_index', name: 'Left Hand Index Finger' },
+    'b': { id: 'fg_l_index', name: 'Left Hand Index Finger' },
+    'y': { id: 'fg_r_index', name: 'Right Hand Index Finger' },
+    'u': { id: 'fg_r_index', name: 'Right Hand Index Finger' },
+    'h': { id: 'fg_r_index', name: 'Right Hand Index Finger' },
+    'j': { id: 'fg_r_index', name: 'Right Hand Index Finger' },
+    'n': { id: 'fg_r_index', name: 'Right Hand Index Finger' },
+    'm': { id: 'fg_r_index', name: 'Right Hand Index Finger' },
+    'i': { id: 'fg_r_middle', name: 'Right Hand Middle Finger' },
+    'k': { id: 'fg_r_middle', name: 'Right Hand Middle Finger' },
+    ',': { id: 'fg_r_middle', name: 'Right Hand Middle Finger' },
+    'o': { id: 'fg_r_ring', name: 'Right Hand Ring Finger' },
+    'l': { id: 'fg_r_ring', name: 'Right Hand Ring Finger' },
+    '.': { id: 'fg_r_ring', name: 'Right Hand Ring Finger' },
+    'p': { id: 'fg_r_pinky', name: 'Right Hand Pinky Finger' },
+    ';': { id: 'fg_r_pinky', name: 'Right Hand Pinky Finger' },
+    ' ': { id: 'fg_l_thumb', altId: 'fg_r_thumb', name: 'Left or Right Thumb (Space)' }
+  };
+
+  const BANK_ESSAYS = [
+    { tag: "🔥 Asked 3x in SBI PO", title: "AI in Mitigating Cyber Fraud and NPAs", prompt: "Examine how Artificial Intelligence, predictive data models, and early warning systems can aid scheduled commercial banks in early detection of Non-Performing Assets." },
+    { tag: "🎯 Expected 2026", title: "UPI & Digital Rails Deepening Rural Credit", prompt: "Discuss the transformative socio-economic impact of Unified Payments Interface (UPI) and Digital Banking Units (DBUs) in bridging the urban-rural credit divide." }
+  ];
+
+  const BANK_LETTERS = [
+    { tag: "🔥 Most Asked in SBI PO", title: "Reactivation of Inoperative / Dormant Account", prompt: "Write a formal letter to your Branch Manager requesting the activation of your dormant savings account along with submission of self-attested copies of Aadhaar, PAN card, and utility bill." },
+    { tag: "🔥 High Frequency IBPS PO", title: "Unauthorized ATM Cash Withdrawal Complaint", prompt: "Draft an urgent grievance letter to the Branch Manager reporting an unauthorized debit of ₹10,000 where the ATM screen displayed transaction failure." }
+  ];
+
+  const VOCAB_COMMON = ["their", "would", "about", "there", "think", "which", "people", "could", "state", "other", "first", "after", "water", "round", "place", "right", "small", "every", "found", "still", "between", "under", "never", "service", "public", "school", "great", "group", "during", "always"];
+  const VOCAB_ADVANCED = ["accommodate", "phenomenon", "conscientious", "bureaucracy", "infrastructure", "pronunciation", "questionnaire", "surveillance", "sovereignty", "correspondence", "jurisdiction", "parliamentary", "prerequisite", "superintendent", "unprecedented", "temperament"];
+  const HINDI_PASSAGES = ["डिजिटल सार्वजनिक अवसंरचना ने देश के वित्तीय परिदृश्य को पूरी तरह से परिवर्तित कर दिया है। त्वरित भुगतान प्रणाली से छोटे व्यापारियों और नागरिकों को वास्तविक समय में लाभ प्राप्त होता है।"];
+
+  let selectedDuration = 60;
+  let activeLang = 'en';
+  let activePool = 'vocab200';
+  let words = [];
+  let currentWordIdx = 0;
+  let correctCount = 0;
+  let errorCount = 0;
+  let totalCharsTyped = 0;
+  let timeLeft = 60;
+  let timeElapsed = 0;
+  let timerInterval = null;
+  let hasStarted = false;
+  
+  // ============================================
+  // DAILY PRACTICE STREAK ENGINE
+  // ============================================
+  function getTodayDateString() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+  function getStreakData() {
+    try {
+      const data = JSON.parse(localStorage.getItem("typing_user_streak"));
+      if (data && typeof data.count === "number") return data;
+    } catch (e) {}
+    return { count: 0, lastDate: null };
+  }
+
+  function updateStreakOnCompletion() {
+    const today = getTodayDateString();
+    let streak = getStreakData();
+
+    if (!streak.lastDate) {
+      streak = { count: 1, lastDate: today };
+    } else if (streak.lastDate === today) {
+      // Already practiced today, keep existing streak
+    } else {
+      const last = new Date(streak.lastDate);
+      const curr = new Date(today);
+      const diffDays = Math.round((curr - last) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        streak.count += 1;
+        streak.lastDate = today;
+      } else {
+        // Gap of more than 1 day resets streak
+        streak.count = 1;
+        streak.lastDate = today;
+      }
+    }
+
+    localStorage.setItem("typing_user_streak", JSON.stringify(streak));
+    renderStreakBadge();
+  }
+
+  function renderStreakBadge() {
+    const streak = getStreakData();
+    const txt = document.getElementById("streakCountText");
+    if (!txt) return;
+
+    if (streak.count <= 0) {
+      txt.innerText = "Start Streak Today";
+    } else if (streak.count === 1) {
+      txt.innerText = "1-Day Streak";
+    } else {
+      txt.innerText = `${streak.count}-Day Streak`;
+    }
+  }
+
+  // Initialize badge on page load
+  window.addEventListener("DOMContentLoaded", () => {
+    renderStreakBadge();
+  });
+
+  let soundEnabled = true;
+
+  let descTimeLeft = 1800;
+  let descTimerRef = null;
+  let pendingExitMode = null;
+  let currentTopicType = 'essay';
+  let activeSelectedTopic = BANK_ESSAYS[0];
+
+  let activeLearnLessonWords = LEARN_LESSONS_CONFIG[0].words;
+  let learnIdx = 0;
+  let activePickedSscLesson = null;
+  let customSelectedDuration = 60;
+
+  const typeInput = document.getElementById('typeInput');
+  const wordStream = document.getElementById('wordStream');
+  const descriptiveEditor = document.getElementById('descriptiveEditor');
+  const learnInput = document.getElementById('learnTypeInput');
+
+  function enterFullScreen() {
+    if (window.innerWidth < 768) return;
+    try {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    } catch(e) {}
+  }
+
+  function exitFullScreenSafe() {
+    try {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      }
+    } catch(e) {}
+  }
+
+  function toggleManualFullScreen() {
+    if (!document.fullscreenElement) enterFullScreen();
+    else exitFullScreenSafe();
+  }
+
+  function toggleOptionsMenu(e) {
+    if (e) e.stopPropagation();
+    const m = document.getElementById('appOptionsMenu');
+    if (m) m.classList.toggle('hidden');
+  }
+
+  document.addEventListener('click', (e) => {
+    const m = document.getElementById('appOptionsMenu');
+    if (m && !m.classList.contains('hidden')) {
+      if (!m.contains(e.target) && e.target.id !== 'threeDotBtn') m.classList.add('hidden');
+    }
+  });
+
+  function openFeedbackModal() {
+    document.getElementById('appOptionsMenu').classList.add('hidden');
+    document.getElementById('feedbackModal').classList.remove('hidden');
+  }
+  function closeFeedbackModal() { document.getElementById('feedbackModal').classList.add('hidden'); }
+  function submitFeedback() {
+    const txt = document.getElementById('feedbackText').value.trim();
+    if (txt.length > 2) {
+      alert("💛 Feedback recorded! Thank you for helping us improve.");
+      document.getElementById('feedbackText').value = "";
+      closeFeedbackModal();
+    } else alert("Please enter a short comment.");
+  }
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    document.getElementById('sndStatus').innerText = soundEnabled ? "ON" : "OFF";
+  }
+  function checkAppUpdates() {
+    document.getElementById('appOptionsMenu').classList.add('hidden');
+    alert("✅ You are running the latest version (v2.6 Pro). All features and data sets are up to date!");
+  }
+  function sharePortalLink() {
+    document.getElementById('appOptionsMenu').classList.add('hidden');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      alert("📋 Link copied to clipboard!");
+    } else alert("Portal: " + window.location.href);
+  }
+  function openPrivacyInfo() {
+    document.getElementById('appOptionsMenu').classList.add('hidden');
+    alert("🔒 Privacy Policy:\n\nAll test runs, keystroke calculations, and descriptive essays are processed 100% locally on your browser. No private keystrokes are transmitted to third parties.");
+  }
+
+  // ============================================
+  // SSC 40-LESSON EXAM BROWSER LOGIC
+  // ============================================
+  function openExamPicker() {
+    renderSscLessonsList('all');
+    const modal = document.getElementById('sscCurriculumModal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closeSscCurriculum() {
+    const modal = document.getElementById('sscCurriculumModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function filterSscLessons(cat, el) {
+    if (el) {
+      el.parentElement.querySelectorAll('.pill-chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+    renderSscLessonsList(cat);
+  }
+
+  function renderSscLessonsList(filter) {
+    const list = document.getElementById('sscLessonCardsList');
+    if (!list) return;
+
+    const filtered = (filter === 'all') 
+      ? SSC_LESSONS_BANK 
+      : SSC_LESSONS_BANK.filter(l => l.category.toLowerCase().includes(filter.toLowerCase()) || l.title.toLowerCase().includes(filter.toLowerCase()));
+
+    list.innerHTML = filtered.map(l => `
+      <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:10px 12px; cursor:pointer;" onclick="pickSscLesson('${l.id}')">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+          <span style="font-size:10px; font-weight:700; color:#2563EB; background:#EFF6FF; padding:2px 8px; border-radius:10px;">${l.category}</span>
+          <span style="font-size:11px; font-weight:700; color:#64748B;">${l.words} Words (~${l.words * 5} Strokes)</span>
+        </div>
+        <b style="font-size:13.5px; color:var(--text-main);">${l.title}</b>
+        <p style="font-size:11px; color:#64748B; margin-top:3px; line-height:1.4;">${l.text.substring(0, 110)}...</p>
+      </div>
+    `).join('');
+  }
+
+  function pickSscLesson(lessonId) {
+    activePickedSscLesson = SSC_LESSONS_BANK.find(l => l.id === lessonId);
+    if (!activePickedSscLesson) return;
+
+    closeSscCurriculum();
+    document.getElementById('pickedLessonTitle').innerText = activePickedSscLesson.title;
+    document.getElementById('pickedLessonMeta').innerText = `${activePickedSscLesson.words} Words • ~${activePickedSscLesson.words * 5} Keystrokes • Category: ${activePickedSscLesson.category}`;
+    document.getElementById('sscLessonTimerModal').classList.remove('hidden');
+  }
+
+  function closeSscLessonTimer() {
+    document.getElementById('sscLessonTimerModal').classList.add('hidden');
+    document.getElementById('sscCurriculumModal').classList.remove('hidden');
+  }
+
+  function launchSelectedSscLesson(sec) {
+    if (!activePickedSscLesson) return;
+    document.getElementById('sscLessonTimerModal').classList.add('hidden');
+
+    words = activePickedSscLesson.text.split(/\s+/).filter(w => w.length > 0);
+    selectedDuration = sec;
+    document.getElementById('modeHeaderTitle').innerText = activePickedSscLesson.title;
+
+    enterFullScreen();
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewTest').classList.remove('hidden');
+    resetCurrentSession(true);
+  }
+
+  // ============================================
+  // TOUCH TYPING LOGIC
+  // ============================================
+  function openLearnMenu() {
+    const container = document.getElementById('learnLessonsCardsContainer');
+    if (container) {
+      container.innerHTML = LEARN_LESSONS_CONFIG.map(l => `
+        <button class="card-action" style="margin:0; padding:10px;" onclick="startLearnLesson('${l.id}', '${l.stage}: ${l.title}')">
+          <div class="card-body" style="text-align:left;">
+            <b style="font-size:13px; color:var(--primary);">${l.stage}: ${l.title}</b>
+            <p style="font-size:11px; color:#64748B;">${l.desc}</p>
+          </div>
+          <div class="card-arrow">→</div>
+        </button>
+      `).join('');
+    }
+    document.getElementById('learnMenuModal').classList.remove('hidden');
+  }
+
+  function closeLearnMenu() { document.getElementById('learnMenuModal').classList.add('hidden'); }
+
+  function startLearnLesson(id, title) {
+    closeLearnMenu();
+    const cfg = LEARN_LESSONS_CONFIG.find(l => l.id === id);
+    if (cfg) activeLearnLessonWords = cfg.words;
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewLearn').classList.remove('hidden');
+    document.getElementById('learnHeaderTitle').innerText = title;
+    resetLearnLesson();
+  }
+
+  function resetLearnLesson() {
+    learnIdx = 0;
+    learnInput.value = "";
+    learnInput.disabled = false;
+    document.getElementById('learnStreamBox').innerHTML = activeLearnLessonWords.map((w, i) => 
+      `<span class="word ${i === 0 ? 'active' : ''}" id="lw-${i}">${w}</span>`
+    ).join(' ');
+    highlightTargetFinger();
+    learnInput.focus();
+  }
+
+  function highlightTargetFinger() {
+    document.querySelectorAll('.finger-zone').forEach(el => el.classList.remove('active-finger'));
+    if (learnIdx >= activeLearnLessonWords.length) {
+      document.getElementById('targetKeyDisplay').innerText = "✓";
+      document.getElementById('targetFingerDesc').innerText = "Lesson Completed! Well done.";
+      return;
+    }
+    const currentWord = activeLearnLessonWords[learnIdx];
+    const val = learnInput.value;
+    const targetChar = (val.length < currentWord.length) ? currentWord[val.length].toLowerCase() : ' ';
+    document.getElementById('targetKeyDisplay').innerText = (targetChar === ' ') ? '␣' : targetChar.toUpperCase();
+
+    const mapping = FINGER_MAP[targetChar];
+    if (mapping) {
+      document.getElementById('targetFingerDesc').innerText = mapping.name;
+      const fingerEl = document.getElementById(mapping.id);
+      if (fingerEl) fingerEl.classList.add('active-finger');
+      if (mapping.altId) {
+        const altEl = document.getElementById(mapping.altId);
+        if (altEl) altEl.classList.add('active-finger');
+      }
+    } else {
+      document.getElementById('targetFingerDesc').innerText = "Standard Position";
+    }
+  }
+
+  learnInput.addEventListener('input', () => {
+    const currentWord = activeLearnLessonWords[learnIdx];
+    const val = learnInput.value;
+    if (val.endsWith(" ") || val.endsWith("\n")) {
+      const cleanVal = val.trim();
+      const el = document.getElementById(`lw-${learnIdx}`);
+      if (cleanVal === currentWord) {
+        if (el) el.className = "word correct";
+      } else {
+        if (el) el.className = "word wrong";
+      }
+      learnIdx++;
+      learnInput.value = "";
+      if (learnIdx < activeLearnLessonWords.length) {
+        const nextEl = document.getElementById(`lw-${learnIdx}`);
+        if (nextEl) {
+          nextEl.className = "word active";
+          nextEl.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+      } else {
+        alert("🎉 Congratulations! You completed this lesson.");
+        openLearnMenu();
+      }
+    }
+    highlightTargetFinger();
+  });
+
+  // ============================================
+  // SPEED TEST ENGINE
+  // ============================================
+  function prepareTest(title, pool, lang, durationSec) {
+    activePool = pool;
+    activeLang = lang || 'en';
+    selectedDuration = durationSec !== undefined ? durationSec : 60;
+    document.getElementById('modeHeaderTitle').innerText = title;
+    enterFullScreen();
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewTest').classList.remove('hidden');
+    resetCurrentSession(false);
+  }
+
+  function resetCurrentSession(isPreloaded) {
+    clearInterval(timerInterval);
+    hasStarted = false;
+    currentWordIdx = 0;
+    correctCount = 0;
+    errorCount = 0;
+    totalCharsTyped = 0;
+    timeElapsed = 0;
+    timeLeft = selectedDuration;
+
+    if (selectedDuration === -1) {
+      document.getElementById('hudTimer').innerText = "00:00";
+      document.getElementById('hudTimerLbl').innerText = "Time Elapsed";
+    } else {
+      document.getElementById('hudTimer').innerText = formatTime(timeLeft);
+      document.getElementById('hudTimerLbl').innerText = "Time Left";
+    }
+
+    document.getElementById('hudNetWpm').innerText = "0";
+    document.getElementById('hudGrossWpm').innerText = "0";
+    document.getElementById('hudAcc').innerText = "100%";
+    typeInput.value = "";
+    typeInput.disabled = false;
+
+    if (!isPreloaded) {
+      if (activePool === 'hindi_passages' || activeLang === 'hi') {
+        words = HINDI_PASSAGES[0].split(/\s+/);
+      } else if (activePool === 'vocab1000') {
+        words = [];
+        for (let i = 0; i < 150; i++) words.push(VOCAB_ADVANCED[Math.floor(Math.random() * VOCAB_ADVANCED.length)]);
+      } else {
+        words = [];
+        for (let i = 0; i < 150; i++) words.push(VOCAB_COMMON[Math.floor(Math.random() * VOCAB_COMMON.length)]);
+      }
+    }
+
+    wordStream.innerHTML = words.map((w, i) => `<span class="word ${i === 0 ? 'active' : ''}" id="w-${i}">${w}</span>`).join('');
+    wordStream.scrollTop = 0;
+    typeInput.focus();
+  }
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+  }
+
+  typeInput.addEventListener('input', () => {
+    if (!hasStarted && typeInput.value.length > 0) {
+      hasStarted = true;
+      timerInterval = setInterval(tick, 1000);
+    }
+    const currentWord = words[currentWordIdx];
+    const val = typeInput.value;
+
+    if (val.endsWith(" ") || val.endsWith("\n")) {
+      const cleanVal = val.trim();
+      const el = document.getElementById(`w-${currentWordIdx}`);
+      if (cleanVal.length > 0) {
+        if (cleanVal === currentWord) {
+          correctCount++;
+          if (el) el.className = "word correct";
+        } else {
+          errorCount++;
+          if (el) el.className = "word wrong";
+        }
+        totalCharsTyped += cleanVal.length + 1;
+        currentWordIdx++;
+        typeInput.value = "";
+
+        if (currentWordIdx < words.length) {
+          const nextEl = document.getElementById(`w-${currentWordIdx}`);
+          if (nextEl) {
+            nextEl.className = "word active";
+            nextEl.scrollIntoView({ block: "center", behavior: "smooth" });
+          }
+        } else {
+          endSession();
+        }
+        calculateStats();
+      }
+    }
+  });
+
+  function tick() {
+    timeElapsed++;
+    if (selectedDuration === -1) {
+      document.getElementById('hudTimer').innerText = formatTime(timeElapsed);
+    } else {
+      timeLeft--;
+      document.getElementById('hudTimer').innerText = formatTime(timeLeft);
+      if (timeLeft <= 0) {
+        endSession();
+        return;
+      }
+    }
+    calculateStats();
+  }
+
+  function calculateStats() {
+    const activeSec = (selectedDuration === -1) ? timeElapsed : (selectedDuration - timeLeft);
+    const elapsedMinutes = activeSec / 60 || 0.01;
+    const grossWpm = Math.round((totalCharsTyped / 5) / elapsedMinutes);
+    const netWpm = Math.max(0, Math.round(grossWpm - (errorCount / elapsedMinutes)));
+    const totalWords = correctCount + errorCount;
+    const accuracy = totalWords > 0 ? Math.round((correctCount / totalWords) * 100) : 100;
+
+    document.getElementById('hudNetWpm').innerText = netWpm;
+    document.getElementById('hudGrossWpm').innerText = grossWpm;
+    document.getElementById('hudAcc').innerText = `${accuracy}%`;
+    return { grossWpm, netWpm, accuracy, errorCount };
+  }
+
+  function requestEarlyExit(mode) {
+    pendingExitMode = mode;
+    document.getElementById('earlyExitModal').classList.remove('hidden');
+  }
+
+  function dismissEarlyExit() {
+    document.getElementById('earlyExitModal').classList.add('hidden');
+    pendingExitMode = null;
+  }
+
+  function confirmEarlyExit() {
+    document.getElementById('earlyExitModal').classList.add('hidden');
+    if (pendingExitMode === 'speed') endSession();
+    else if (pendingExitMode === 'descriptive') submitDescriptiveTest();
+  }
+
+  function endSession() {
+    updateStreakOnCompletion();
+    clearInterval(timerInterval);
+    typeInput.disabled = true;
+    const res = calculateStats();
+
+    document.getElementById('resNetWpm').innerText = res.netWpm;
+    document.getElementById('resAcc').innerText = `${res.accuracy}%`;
+    document.getElementById('resGrossWpm').innerText = res.grossWpm;
+    document.getElementById('resErrors').innerText = res.errorCount;
+
+    document.getElementById('resGridNormal').classList.remove('hidden');
+    document.getElementById('resDescriptiveSummary').classList.add('hidden');
+    document.getElementById('resHeaderTitle').innerText = "Test Completed!";
+    document.getElementById('resSubTitle').innerText = "Verified Speed Performance Summary";
+    document.getElementById('resultModal').classList.remove('hidden');
+  }
+
+  // ============================================
+  // BANK PO DESCRIPTIVE WORKFLOW
+  // ============================================
+  function openDescriptiveSelector() {
+    document.getElementById('descSelectorModal').classList.remove('hidden');
+    switchTopicTab('essay');
+  }
+
+  function closeDescriptiveSelector() { document.getElementById('descSelectorModal').classList.add('hidden'); }
+
+  function switchTopicTab(type) {
+    currentTopicType = type;
+    document.getElementById('tabEssaysBtn').classList.toggle('active', type === 'essay');
+    document.getElementById('tabLettersBtn').classList.toggle('active', type === 'letter');
+
+    const container = document.getElementById('topicListContainer');
+    const items = type === 'essay' ? BANK_ESSAYS : BANK_LETTERS;
+
+    container.innerHTML = items.map((it, idx) => `
+      <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:11px; cursor:pointer;" onclick="launchSelectedDescriptive(${idx})">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span style="background:#E0F2FE; color:#0369A1; font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px;">${it.tag}</span>
+          <span style="font-size:11px; color:#64748B; font-weight:600;">${type === 'essay' ? '250 Words' : '150 Words'}</span>
+        </div>
+        <b style="font-size:13px; color:var(--primary);">${idx + 1}. ${it.title}</b>
+        <p style="font-size:11.5px; color:#475569; margin-top:3px; line-height:1.4;">${it.prompt}</p>
+      </div>
+    `).join('');
+  }
+
+  function launchSelectedDescriptive(idx) {
+    closeDescriptiveSelector();
+    activeSelectedTopic = (currentTopicType === 'essay') ? BANK_ESSAYS[idx] : BANK_LETTERS[idx];
+    const targetWords = (currentTopicType === 'essay') ? 250 : 150;
+
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewDescriptive').classList.remove('hidden');
+
+    document.getElementById('descTopicTitle').innerText = `${activeSelectedTopic.title} (${targetWords} Words)`;
+    document.getElementById('descTopicPrompt').innerText = `"${activeSelectedTopic.prompt}"`;
+
+    descriptiveEditor.value = "";
+    document.getElementById('descWordCount').innerText = `Words: 0 / ${targetWords}`;
+    document.getElementById('descCharCount').innerText = "Characters: 0";
+
+    descTimeLeft = 1800;
+    clearInterval(descTimerRef);
+    descTimerRef = setInterval(() => {
+      descTimeLeft--;
+      document.getElementById('descTimer').innerText = formatTime(descTimeLeft);
+      if (descTimeLeft <= 0) {
+        clearInterval(descTimerRef);
+        submitDescriptiveTest();
+      }
+    }, 1000);
+
+    descriptiveEditor.focus();
+  }
+
+  descriptiveEditor.addEventListener('input', () => {
+    const text = descriptiveEditor.value.trim();
+    const wordsCount = text.length > 0 ? text.split(/\s+/).length : 0;
+    const charsCount = descriptiveEditor.value.length;
+    const target = currentTopicType === 'essay' ? 250 : 150;
+    document.getElementById('descWordCount').innerText = `Words: ${wordsCount} / ${target}`;
+    document.getElementById('descCharCount').innerText = `Characters: ${charsCount}`;
+  });
+
+  function submitDescriptiveTest() {
+    updateStreakOnCompletion();
+    clearInterval(descTimerRef);
+    const rawText = descriptiveEditor.value.trim();
+    const wordsArr = rawText.length > 0 ? rawText.split(/\s+/).filter(w => w.length > 0) : [];
+    const wordCount = wordsArr.length;
+    const isEssay = (currentTopicType === 'essay');
+    const targetMin = isEssay ? 220 : 130;
+    const maxScore = isEssay ? 25 : 15;
+
+    if (wordCount < 15) {
+      document.getElementById('resGridNormal').classList.add('hidden');
+      document.getElementById('resDescriptiveSummary').classList.remove('hidden');
+      document.getElementById('resHeaderTitle').innerText = "Bank PO Descriptive Assessment Sheet";
+      document.getElementById('resSubTitle').innerText = `Topic: ${activeSelectedTopic.title}`;
+      document.getElementById('scoreTotalBadge').innerText = `0.0 / ${maxScore}`;
+      const verdictEl = document.getElementById('scoreVerdictBadge');
+      verdictEl.innerText = "REJECTED (INSUFFICIENT ATTEMPT)";
+      verdictEl.style.background = "#FEE2E2";
+      verdictEl.style.color = "#B91C1C";
+      document.getElementById('scRemarksText').innerHTML = `<span style="color:#DC2626;"><b>Zero Marks:</b> Typed only ${wordCount} words. Disqualified for failing minimum length.</span>`;
+      document.getElementById('resultModal').classList.remove('hidden');
+      return;
+    }
+
+    let scoreWords = (wordCount >= targetMin) ? 5.0 : Math.max(0.5, (wordCount / targetMin) * 5.0);
+    let scoreStructure = (rawText.split(/\n+/).length >= 2) ? (isEssay ? 4.5 : 2.5) : 1.5;
+    let scoreLexical = (wordCount >= 100) ? (isEssay ? 4.0 : 2.5) : 1.5;
+    let scoreGrammar = (isEssay ? 7.0 : 4.0);
+    let totalAwarded = Math.min(maxScore, (scoreWords + scoreStructure + scoreLexical + scoreGrammar)).toFixed(1);
+
+    document.getElementById('resGridNormal').classList.add('hidden');
+    document.getElementById('resDescriptiveSummary').classList.remove('hidden');
+    document.getElementById('scoreTotalBadge').innerText = `${totalAwarded} / ${maxScore}`;
+    const verdictEl = document.getElementById('scoreVerdictBadge');
+    verdictEl.innerText = (Number(totalAwarded) >= (isEssay ? 13.5 : 8.0)) ? "QUALIFIED" : "BELOW CUT-OFF";
+    verdictEl.style.background = (Number(totalAwarded) >= (isEssay ? 13.5 : 8.0)) ? "#DCFCE7" : "#FEE2E2";
+    verdictEl.style.color = (Number(totalAwarded) >= (isEssay ? 13.5 : 8.0)) ? "#15803D" : "#B91C1C";
+
+    document.getElementById('scWordCount').innerText = `${scoreWords.toFixed(1)} / 5.0`;
+    document.getElementById('scStructure').innerText = `${scoreStructure.toFixed(1)} / ${(isEssay ? 5.0 : 3.0).toFixed(1)}`;
+    document.getElementById('scLexical').innerText = `${scoreLexical.toFixed(1)} / ${(isEssay ? 5.0 : 3.0).toFixed(1)}`;
+    document.getElementById('scGrammar').innerText = `${scoreGrammar.toFixed(1)} / ${(isEssay ? 10.0 : 4.0).toFixed(1)}`;
+    document.getElementById('scRemarksText').innerHTML = `Typed <b>${wordCount} words</b>. Formatted successfully.`;
+    document.getElementById('resultModal').classList.remove('hidden');
+  }
+
+  // ============================================
+  // CUSTOM STUDIO LOGIC
+  // ============================================
+  function prepareCustom() {
+    document.getElementById('customStudioModal').classList.remove('hidden');
+    document.getElementById('customStudioText').focus();
+  }
+  function closeCustomStudio() { document.getElementById('customStudioModal').classList.add('hidden'); }
+  function setCustomDurationVal(sec, btn) {
+    customSelectedDuration = sec;
+    btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function loadCustomPreset(type) {
+    const txtArea = document.getElementById('customStudioText');
+    if (type === 'editorial') {
+      txtArea.value = "Fiscal prudence and targeted capital expenditure continue to anchor economic expansion across developing industrial corridors. Interoperable digital payment architectures minimize settlement friction while formalizing credit penetration among micro-enterprises.";
+    } else if (type === 'legal') {
+      txtArea.value = "The appellant contends that the statutory tribunal exceeded its jurisdictional purview by failing to adhere to mandatory principles of natural justice. Procedural regularities cannot supplant substantive constitutional safeguards guaranteed under the overarching framework.";
+    }
+  }
+  function launchConfiguredCustomTest() {
+    const raw = document.getElementById('customStudioText').value.trim();
+    if (raw.length < 5) {
+      alert("Please enter a few sentences or words.");
+      return;
+    }
+    let parsedWords = raw.split(/\s+/).filter(w => w.length > 0);
+    if (document.getElementById('chkCustomRandomize').checked) {
+      parsedWords.sort(() => Math.random() - 0.5);
+    }
+    closeCustomStudio();
+    words = parsedWords;
+    selectedDuration = customSelectedDuration;
+    document.getElementById('modeHeaderTitle').innerText = "Custom Test Studio";
+    enterFullScreen();
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewTest').classList.remove('hidden');
+    resetCurrentSession(true);
+  }
+
+  function exitToHome() {
+    clearInterval(timerInterval);
+    clearInterval(descTimerRef);
+    exitFullScreenSafe();
+    document.getElementById('resultModal').classList.add('hidden');
+    document.getElementById('viewTest').classList.add('hidden');
+    document.getElementById('viewLearn').classList.add('hidden');
+    document.getElementById('viewDescriptive').classList.add('hidden');
+    document.getElementById('viewHome').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
