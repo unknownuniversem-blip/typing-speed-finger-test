@@ -437,64 +437,89 @@
   <link rel="icon" type="image/png" href="icon-192.png">
   <meta name="theme-color" content="#0F4C81">
 
-<style id="hide-floating-pill-menu">
-  /* Hide the rogue floating pill from dashboard / menu */
-  #globalKbdToggle, .kbd-toggle-pill {
+
+
+
+
+
+
+<style id="typing-app-universal-fullscreen">
+  /* Force vertical stacking on both laptop and mobile */
+  html, body {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    background-color: #f8fafc !important;
+  }
+
+  /* Expand main container to fill screen with max width ceiling on laptop */
+  .app-viewport,
+  main,
+  #app,
+  .dashboard,
+  .menu-view,
+  .test-view,
+  .view-container {
+    width: 100% !important;
+    max-width: 1100px !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Make header hero card span 100% */
+  .hero-section,
+  .top-banner,
+  .header-card,
+  header {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Make menu cards stretch edge-to-edge inside container */
+  .menu-grid,
+  .grid,
+  .cards-container {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Footer sits properly below everything, not off to the side */
+  footer {
+    width: 100% !important;
+    max-width: 1100px !important;
+    margin: 32px auto 20px auto !important;
+    padding: 16px 8px !important;
+    text-align: center !important;
+    clear: both !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Keep rogue floating pill hidden on menu */
+  #globalKbdToggle,
+  .kbd-toggle-pill {
     display: none !important;
   }
-  /* Enforce clean screen containment */
-  html, body {
-    max-width: 100vw !important;
-    overflow-x: hidden !important;
-  }
-</style>
 
-
-<style id="mobile-responsive-fullwidth">
+  /* Inside individual tests: keep header bar and controls full width */
   @media (max-width: 768px) {
-    html, body {
-      width: 100% !important;
-      max-width: 100vw !important;
-      overflow-x: hidden !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    /* Force the app viewport and containers to take full screen width */
     .app-viewport,
     main,
-    .container,
     .dashboard,
     .menu-view {
-      width: 100% !important;
-      max-width: 100% !important;
-      padding: 12px !important;
-      box-sizing: border-box !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-
-    /* Expand header and all cards to span across the screen */
-    .hero-section,
-    header,
-    .card,
-    [class*="card"],
-    .menu-grid,
-    .grid {
-      width: 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-
-    /* Force footer to the bottom rather than floating to the right */
-    footer,
-    [class*="footer"] {
-      position: static !important;
-      width: 100% !important;
-      margin-top: 24px !important;
-      text-align: center !important;
+      max-width: 100vw !important;
+      padding: 10px !important;
     }
   }
 </style>
