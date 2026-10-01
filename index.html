@@ -446,87 +446,34 @@
 
 
 
-<style id="test-header-keyboard-toggle">
-  /* Force container containment */
-  html, body {
-    max-width: 100vw !important;
+
+
+
+<style id="safe-core-fix">
+  /* 1. Prevent sidebar shift: stack body vertically on all screen sizes */
+  body {
+    flex-direction: column !important;
+    align-items: center !important;
     overflow-x: hidden !important;
   }
 
-  /* Hide the old floating pill everywhere */
-  #globalKbdToggle,
-  .kbd-toggle-pill {
+  /* 2. Footer stays at bottom, full width */
+  footer {
+    width: 100% !important;
+    text-align: center !important;
+    margin-top: auto !important;
+    clear: both !important;
+  }
+
+  /* 3. Hide the rogue button on the landing view */
+  #globalKbdToggle {
     display: none !important;
   }
 
-  /* Compact in-header keyboard & OTG switch */
-  .top-right-header-tools {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    margin-left: auto !important;
-  }
-
-  .header-kbd-switch-label {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    cursor: pointer !important;
-    color: #ffffff !important;
-    font-size: 14px !important;
-    user-select: none !important;
-  }
-
-  .header-switch-toggle {
-    position: relative !important;
-    display: inline-block !important;
-    width: 36px !important;
-    height: 20px !important;
-    background-color: #022030 !important;
-    border-radius: 20px !important;
-    transition: 0.2s !important;
-  }
-
-  .header-switch-toggle::after {
-    content: '' !important;
-    position: absolute !important;
-    width: 14px !important;
-    height: 14px !important;
-    border-radius: 50% !important;
-    background-color: #ffffff !important;
-    top: 3px !important;
-    left: 3px !important;
-    transition: 0.2s !important;
-  }
-
-  .header-switch-toggle.active {
-    background-color: #22c55e !important;
-  }
-
-  .header-switch-toggle.active::after {
-    transform: translateX(16px) !important;
-  }
-
-  /* Enforce prompt text box word-wrapping */
-  .word-box,
-  .words-display,
-  .prompt-card,
-  .test-card,
-  [class*="word"],
-  [id*="word"] {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+  /* 4. Text must never overflow its container */
+  .word-box, .words-display, input {
     word-break: break-word !important;
     overflow-wrap: break-word !important;
-    white-space: normal !important;
-  }
-
-  /* Enforce input text bounds */
-  input[type="text"],
-  .typing-input {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    word-break: break-word !important;
   }
 </style>
 
@@ -2256,45 +2203,7 @@
 </script>
 
 
-<script id="test-header-keyboard-script">
-(function() {
-  function mountHeaderKeyboardSwitch() {
-    // Look for test screen header/top-bar
-    const headers = document.querySelectorAll('.test-header, .top-bar, header, [class*="header"]');
-    headers.forEach(h => {
-      // Don't mount on landing page hero cards
-      if (h.classList.contains('hero-section') || h.querySelector('#globalKbdToggle')) return;
-      if (h.querySelector('.top-right-header-tools')) return;
 
-      const tools = document.createElement('div');
-      tools.className = 'top-right-header-tools';
-      tools.innerHTML = `
-        <label class="header-kbd-switch-label" title="Toggle Physical / OTG Keyboard">
-          <span>⌨️</span>
-          <span class="header-switch-toggle active" id="headerKbdSwitch"></span>
-        </label>
-      `;
-
-      tools.querySelector('.header-kbd-switch-label').addEventListener('click', (e) => {
-        e.preventDefault();
-        const toggle = tools.querySelector('#headerKbdSwitch');
-        toggle.classList.toggle('active');
-        const isPhysical = toggle.classList.contains('active');
-        
-        // Trigger global handler if it exists
-        if (typeof toggleGlobalVirtualKeyboard === 'function') {
-          toggleGlobalVirtualKeyboard();
-        }
-      });
-
-      h.appendChild(tools);
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', mountHeaderKeyboardSwitch);
-  setInterval(mountHeaderKeyboardSwitch, 1000);
-})();
-</script>
 
 </body>
 </html>
