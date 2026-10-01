@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Typing Master Pro | Exam & Speed Terminal</title>
+<title>Typing Speed: Finger Test</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -396,13 +396,6 @@
     .modal-card { max-width: 560px; }
   }
 </style>
-
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0F4C81">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TypingPro">
-
 </head>
 <body>
 
@@ -419,7 +412,7 @@
               <span>🔥</span> <span id="streakCountText">1-Day Streak</span>
             </div>
           </div>
-          <div class="greeting">Master Your Keystrokes ⌨️</div>
+          <div class="greeting">Typing Speed: Finger Test 🎮</div>
           <div class="sub-greeting">Build effortless speed, razor-sharp accuracy, and touch-typing confidence.</div>
         </div>
         <button class="icon-btn" id="threeDotBtn" onclick="toggleOptionsMenu(event)">⋮</button>
@@ -435,6 +428,7 @@
     </div>
 
     <div class="view-content">
+            <!-- 1. TOUCH TYPING ACADEMY (100% PURE - NO GAMES) -->
       <div class="card-action" onclick="openLearnMenu()">
         <div class="card-icon icon-cyan">🖐️</div>
         <div class="card-body">
@@ -444,6 +438,20 @@
         <div class="card-arrow">→</div>
       </div>
 
+      <!-- 2. TYPING SPEED GAMES (INDEPENDENT STANDALONE ARCADE) -->
+      <div class="card-action" style="border: 2px solid #818CF8; background: #FFFFFF;" onclick="openGameSelectionModal()">
+        <div class="card-icon" style="background:#4F46E5; color:#FFFFFF; font-size:22px;">🎮</div>
+        <div class="card-body">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <h3 style="color:#1E1B4B; font-weight:800;">Typing Speed Games</h3>
+            <span style="background:#EF4444; color:#FFF; font-size:9.5px; font-weight:800; padding:2px 7px; border-radius:10px;">ARCADE</span>
+          </div>
+          <p style="color:#64748B;">Meteor Strike • 60s Speed Burst • Word Sprint Reflexes</p>
+        </div>
+        <div class="card-arrow" style="color:#4F46E5; font-weight:800;">PLAY ➔</div>
+      </div>
+
+      <!-- 3. SPEED RUNS -->
       <div class="card-action" onclick="prepareTest('Typing Test (Top 200)', 'vocab200', 'en', 60)">
         <div class="card-icon icon-green">▶</div>
         <div class="card-body">
@@ -489,6 +497,10 @@
         <div class="card-arrow">→</div>
       </div>
 
+      
+      <!-- 7. TYPING ARCADE GAME -->
+      
+
       <div class="card-action" onclick="prepareCustom()">
         <div class="card-icon icon-purple">⚙</div>
         <div class="card-body">
@@ -509,6 +521,49 @@
     </div>
   </div>
 
+  
+    <!-- VIEW 5: TYPING ARCADE GAME ARENA -->
+  <div id="viewGame" class="hidden">
+    <div class="app-header compact" style="background:#1E1B4B;">
+      <button class="icon-btn" onclick="exitGameArena()" title="Back to Home">←</button>
+      <div style="font-weight:700; font-size:15px; color:#E0E7FF;" id="gameActiveTitle">Meteor Strike 🚀</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span id="gameLivesDisplay" style="font-size:14px;">❤️❤️❤️</span>
+        <button class="icon-btn" onclick="resetGameArena()" title="Restart">↻</button>
+      </div>
+    </div>
+
+    <div class="view-content" style="padding:10px 14px 80px; display:flex; flex-direction:column; align-items:center;">
+      <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:13px; font-weight:700;">
+        <span style="color:#4338CA;">Score: <b id="gameScoreVal" style="font-family:'JetBrains Mono'; font-size:16px;">0</b></span>
+        <span style="color:#059669;">Pace: <b id="gameSpeedVal" style="font-family:'JetBrains Mono';">1.0x</b></span>
+      </div>
+
+      <div style="position:relative; width:100%; height:320px; background:#0F172A; border-radius:14px; overflow:hidden; border:2px solid #312E81;">
+        <canvas id="gameCanvas" width="460" height="320" style="width:100%; height:100%; display:block;"></canvas>
+        <div id="gameOverOverlay" class="hidden" style="position:absolute; inset:0; background:rgba(15,23,42,0.9); display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; z-index:50;">
+          <div style="font-size:38px;">💥</div>
+          <h3 style="font-size:20px; font-weight:800; margin:6px 0;">Game Finished!</h3>
+          <p style="font-size:13px; color:#CBD5E1; margin-bottom:14px;">Final Score: <b id="finalGameScore" style="color:#38BDF8; font-size:18px;">0</b></p>
+          <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="padding:8px 16px;" onclick="exitGameArena()">Back to Home</button>
+            <button class="btn-primary" style="padding:8px 20px;" onclick="resetGameArena()">Play Again 🔄</button>
+          </div>
+        </div>
+      </div>
+
+      <input type="text" 
+             id="gameInput" 
+             class="type-field" 
+             placeholder="Type words here..." 
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             style="margin-top:12px; border-color:#6366F1; font-size:18px;">
+    </div>
+
+    <div class="bottom-bar">
+      <button class="btn-danger-outline" style="width:100%;" onclick="exitGameArena()">⏹ Exit Game to Home</button>
+    </div>
+  </div>
   <!-- VIEW 2: LEARN TOUCH TYPING -->
   <div id="viewLearn" class="hidden">
     <div class="app-header compact">
@@ -1097,6 +1152,336 @@
   const descriptiveEditor = document.getElementById('descriptiveEditor');
   const learnInput = document.getElementById('learnTypeInput');
 
+  
+  // ============================================
+  // BULLETPROOF MULTI-MODE TYPING GAMES ENGINE
+  // ============================================
+  let chosenGameMode = 'meteor';
+  let userGameBaseSpeed = 1.0;
+  let gameScore = 0;
+  let gameLives = 3;
+  let gameTimeLeft = 60;
+  let activeMeteors = [];
+  let currentTargetWord = "";
+  let wordFuseTimer = 100;
+  let gameIntervalRef = null;
+  let gameAnimFrameRef = null;
+  let lastMeteorSpawn = 0;
+  let isGameActive = false;
+
+  const ARCADE_WORDS = [
+    "spark", "blitz", "flash", "pulse", "laser", "orbit", "rapid", "shift",
+    "power", "turbo", "glider", "matrix", "stream", "strike", "vector",
+    "rocket", "flight", "cosmic", "flame", "cadence", "hyper", "cyber",
+    "speed", "focus", "dynamo", "sprint", "charge", "stellar", "impact", "vertex"
+  ];
+
+  function openGameSelectionModal() {
+    const modal = document.getElementById('gameSelectModal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closeGameSelectionModal() {
+    const modal = document.getElementById('gameSelectModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function selectGameSpeed(val, btn) {
+    userGameBaseSpeed = val;
+    btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function launchSelectedGame(mode) {
+    chosenGameMode = mode;
+    closeGameSelectionModal();
+    enterFullScreen();
+
+    // 1. Unhide game screen FIRST so canvas has non-zero client dimensions
+    document.getElementById('viewHome').classList.add('hidden');
+    document.getElementById('viewGame').classList.remove('hidden');
+
+    const titles = {
+      'meteor': 'Meteor Strike 🚀',
+      'burst': '60s Speed Burst ⚡',
+      'sprint': 'Word Sprint ⏱️'
+    };
+    document.getElementById('gameActiveTitle').innerText = titles[mode] || 'Typing Game';
+
+    // 2. Start Game
+    resetGameArena();
+  }
+
+  function exitGameArena() {
+    isGameActive = false;
+    if (gameIntervalRef) clearInterval(gameIntervalRef);
+    if (gameAnimFrameRef) cancelAnimationFrame(gameAnimFrameRef);
+    exitFullScreenSafe();
+    document.getElementById('viewGame').classList.add('hidden');
+    document.getElementById('viewHome').classList.remove('hidden');
+  }
+
+  function resetGameArena() {
+    isGameActive = true;
+    gameScore = 0;
+    gameLives = 3;
+    gameTimeLeft = 60;
+    activeMeteors = [];
+    wordFuseTimer = 100;
+    lastMeteorSpawn = Date.now();
+
+    if (gameIntervalRef) clearInterval(gameIntervalRef);
+    if (gameAnimFrameRef) cancelAnimationFrame(gameAnimFrameRef);
+
+    document.getElementById('gameOverOverlay').classList.add('hidden');
+    document.getElementById('gameScoreVal').innerText = "0";
+    document.getElementById('gameSpeedVal').innerText = userGameBaseSpeed.toFixed(1) + "x";
+    updateLivesUI();
+
+    const canvas = document.getElementById('gameCanvas');
+    if (canvas) {
+      canvas.width = canvas.parentElement.clientWidth || 460;
+      canvas.height = 320;
+    }
+
+    const input = document.getElementById('gameInput');
+    if (input) {
+      input.value = "";
+      input.disabled = false;
+      input.focus();
+    }
+
+    if (chosenGameMode === 'meteor') {
+      spawnMeteor();
+      gameLoopMeteor();
+    } else if (chosenGameMode === 'burst') {
+      startBurstMode();
+    } else if (chosenGameMode === 'sprint') {
+      startSprintMode();
+    }
+  }
+
+  function updateLivesUI() {
+    const el = document.getElementById('gameLivesDisplay');
+    if (el) el.innerText = "❤️".repeat(Math.max(0, gameLives));
+  }
+
+  function spawnMeteor() {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    const word = ARCADE_WORDS[Math.floor(Math.random() * ARCADE_WORDS.length)];
+    const x = Math.random() * (canvas.width - 120) + 20;
+    activeMeteors.push({
+      text: word,
+      x: x,
+      y: 30,
+      speed: (0.75 + Math.random() * 0.4) * userGameBaseSpeed
+    });
+  }
+
+  function gameLoopMeteor() {
+    if (!isGameActive) return;
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#0F172A';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Defense baseline
+    ctx.strokeStyle = '#EF4444';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height - 30);
+    ctx.lineTo(canvas.width, canvas.height - 30);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Spawn new word
+    const now = Date.now();
+    const spawnRate = Math.max(1200, 2600 / userGameBaseSpeed - (gameScore * 15));
+    if (now - lastMeteorSpawn > spawnRate) {
+      spawnMeteor();
+      lastMeteorSpawn = now;
+    }
+
+    // Render & animate meteors
+    ctx.font = "bold 16px 'JetBrains Mono', monospace";
+    for (let i = activeMeteors.length - 1; i >= 0; i--) {
+      const m = activeMeteors[i];
+      m.y += m.speed;
+
+      const txtWidth = ctx.measureText(m.text).width;
+      ctx.fillStyle = 'rgba(99, 102, 241, 0.3)';
+      ctx.fillRect(m.x - 8, m.y - 16, txtWidth + 16, 24);
+      ctx.strokeStyle = '#818CF8';
+      ctx.strokeRect(m.x - 8, m.y - 16, txtWidth + 16, 24);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(m.text, m.x, m.y);
+
+      // Hit baseline
+      if (m.y >= canvas.height - 30) {
+        activeMeteors.splice(i, 1);
+        gameLives--;
+        updateLivesUI();
+        if (gameLives <= 0) {
+          endGame();
+          return;
+        }
+      }
+    }
+
+    gameAnimFrameRef = requestAnimationFrame(gameLoopMeteor);
+  }
+
+  function startBurstMode() {
+    pickNextBurstWord();
+    gameIntervalRef = setInterval(() => {
+      gameTimeLeft--;
+      document.getElementById('gameSpeedVal').innerText = gameTimeLeft + "s";
+      if (gameTimeLeft <= 0) {
+        clearInterval(gameIntervalRef);
+        endGame();
+      }
+    }, 1000);
+  }
+
+  function pickNextBurstWord() {
+    currentTargetWord = ARCADE_WORDS[Math.floor(Math.random() * ARCADE_WORDS.length)];
+    renderBurstCanvas();
+  }
+
+  function renderBurstCanvas() {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0F172A';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#818CF8';
+    ctx.font = "bold 14px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("60-SECOND RAPID WORD BLITZ", canvas.width / 2, 45);
+
+    ctx.fillStyle = '#38BDF8';
+    ctx.font = "800 36px 'JetBrains Mono', monospace";
+    ctx.fillText(currentTargetWord, canvas.width / 2, 160);
+
+    ctx.fillStyle = '#94A3B8';
+    ctx.font = "13px 'Plus Jakarta Sans', sans-serif";
+    ctx.fillText("Type word and press Space or Enter", canvas.width / 2, 220);
+    ctx.textAlign = "start";
+  }
+
+  function startSprintMode() {
+    pickNextSprintWord();
+    gameIntervalRef = setInterval(() => {
+      wordFuseTimer -= 1.6 * userGameBaseSpeed;
+      renderSprintCanvas();
+      if (wordFuseTimer <= 0) {
+        gameLives--;
+        updateLivesUI();
+        if (gameLives <= 0) {
+          clearInterval(gameIntervalRef);
+          endGame();
+        } else {
+          pickNextSprintWord();
+        }
+      }
+    }, 30);
+  }
+
+  function pickNextSprintWord() {
+    wordFuseTimer = 100;
+    currentTargetWord = ARCADE_WORDS[Math.floor(Math.random() * ARCADE_WORDS.length)];
+    renderSprintCanvas();
+  }
+
+  function renderSprintCanvas() {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0F172A';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Fuse countdown bar
+    const barWidth = (canvas.width - 60) * (wordFuseTimer / 100);
+    ctx.fillStyle = wordFuseTimer > 35 ? '#10B981' : '#EF4444';
+    ctx.fillRect(30, 40, Math.max(0, barWidth), 8);
+
+    ctx.fillStyle = '#FDA4AF';
+    ctx.font = "bold 13px 'Plus Jakarta Sans', sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("BEAT THE FUSE COUNTDOWN", canvas.width / 2, 25);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = "800 36px 'JetBrains Mono', monospace";
+    ctx.fillText(currentTargetWord, canvas.width / 2, 165);
+    ctx.textAlign = "start";
+  }
+
+  // Hook word input submissions
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('gameInput');
+    if (!input) return;
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        checkGameWordSubmission();
+      }
+    });
+
+    input.addEventListener('input', () => {
+      if (chosenGameMode === 'meteor') {
+        const val = input.value.trim().toLowerCase();
+        const hitIdx = activeMeteors.findIndex(m => m.text.toLowerCase() === val);
+        if (hitIdx !== -1) {
+          activeMeteors.splice(hitIdx, 1);
+          input.value = "";
+          gameScore += 10;
+          document.getElementById('gameScoreVal').innerText = gameScore;
+        }
+      }
+    });
+  });
+
+  function checkGameWordSubmission() {
+    const input = document.getElementById('gameInput');
+    if (!input) return;
+    const val = input.value.trim().toLowerCase();
+    input.value = "";
+
+    if (chosenGameMode === 'burst') {
+      if (val === currentTargetWord.toLowerCase()) {
+        gameScore += 10;
+        document.getElementById('gameScoreVal').innerText = gameScore;
+        pickNextBurstWord();
+      }
+    } else if (chosenGameMode === 'sprint') {
+      if (val === currentTargetWord.toLowerCase()) {
+        gameScore += 15;
+        document.getElementById('gameScoreVal').innerText = gameScore;
+        pickNextSprintWord();
+      }
+    }
+  }
+
+  function endGame() {
+    isGameActive = false;
+    if (gameIntervalRef) clearInterval(gameIntervalRef);
+    if (gameAnimFrameRef) cancelAnimationFrame(gameAnimFrameRef);
+    const input = document.getElementById('gameInput');
+    if (input) input.disabled = true;
+
+    document.getElementById('finalGameScore').innerText = gameScore;
+    document.getElementById('gameOverOverlay').classList.remove('hidden');
+    updateStreakOnCompletion();
+  }
+
   function enterFullScreen() {
     if (window.innerWidth < 768) return;
     try {
@@ -1660,14 +2045,5 @@
     document.getElementById('viewHome').classList.remove('hidden');
   }
 </script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed:', err));
-    });
-  }
-</script>
-
 </body>
 </html>
