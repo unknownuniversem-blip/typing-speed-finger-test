@@ -449,31 +449,114 @@
 
 
 
-<style id="safe-core-fix">
-  /* 1. Prevent sidebar shift: stack body vertically on all screen sizes */
-  body {
-    flex-direction: column !important;
-    align-items: center !important;
+
+
+
+<style id="clean-friend-layout">
+  /* 1. Global Viewport Structure */
+  html, body {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #f1f5f9 !important;
     overflow-x: hidden !important;
   }
 
-  /* 2. Footer stays at bottom, full width */
-  footer {
-    width: 100% !important;
-    text-align: center !important;
-    margin-top: auto !important;
-    clear: both !important;
-  }
-
-  /* 3. Hide the rogue button on the landing view */
-  #globalKbdToggle {
-    display: none !important;
-  }
-
-  /* 4. Text must never overflow its container */
-  .word-box, .words-display, input {
+  /* 2. Target Word Card (Exactly like Screenshot 2) */
+  .words-display,
+  .word-box,
+  .prompt-card,
+  #wordsWrapper,
+  #words {
+    width: 92% !important;
+    max-width: 680px !important;
+    margin: 16px auto 14px auto !important;
+    padding: 16px 20px !important;
+    background: #ffffff !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+    font-size: 19px !important;
+    line-height: 1.8 !important;
+    letter-spacing: 0.3px !important;
     word-break: break-word !important;
     overflow-wrap: break-word !important;
+    white-space: normal !important;
+    min-height: 84px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 3. Typing Input Box with Docked 01:00 Timer */
+  .input-bar-container,
+  .input-wrapper,
+  .typing-area,
+  .test-input-row {
+    width: 92% !important;
+    max-width: 680px !important;
+    margin: 0 auto 24px auto !important;
+    display: flex !important;
+    align-items: center !important;
+    background: #ffffff !important;
+    border: 1.5px solid #94a3b8 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* The actual typing text input field */
+  input[type="text"],
+  input.typing-input,
+  #wordInput {
+    flex: 1 !important;
+    height: 48px !important;
+    padding: 0 16px !important;
+    font-size: 18px !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    color: #0f172a !important;
+    box-sizing: border-box !important;
+  }
+
+  /* The 01:00 timer block on the right of the input */
+  .timer-badge,
+  .timer-display,
+  #timer,
+  .test-timer {
+    background-color: #0c4a6e !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 17px !important;
+    padding: 10px 18px !important;
+    border-radius: 8px !important;
+    margin: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 65px !important;
+  }
+
+  /* 4. Provide plenty of vertical space below input for typing & onscreen keyboard */
+  .test-container,
+  .test-view,
+  main {
+    padding-bottom: 220px !important;
+  }
+
+  /* Push banner ads well below the active typing field */
+  ins.adsbygoogle,
+  .ad-container,
+  [class*="ad-"] {
+    margin-top: 36px !important;
+    margin-bottom: 24px !important;
+    display: block !important;
+  }
+
+  /* 5. Hide the stray landing page OTG button if still present */
+  body:not(.in-test) > #globalKbdToggle,
+  .dashboard #globalKbdToggle {
+    display: none !important;
   }
 </style>
 
