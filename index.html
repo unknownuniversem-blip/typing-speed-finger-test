@@ -449,6 +449,56 @@
   }
 </style>
 
+
+<style id="mobile-responsive-fullwidth">
+  @media (max-width: 768px) {
+    html, body {
+      width: 100% !important;
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Force the app viewport and containers to take full screen width */
+    .app-viewport,
+    main,
+    .container,
+    .dashboard,
+    .menu-view {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 12px !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* Expand header and all cards to span across the screen */
+    .hero-section,
+    header,
+    .card,
+    [class*="card"],
+    .menu-grid,
+    .grid {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* Force footer to the bottom rather than floating to the right */
+    footer,
+    [class*="footer"] {
+      position: static !important;
+      width: 100% !important;
+      margin-top: 24px !important;
+      text-align: center !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 
