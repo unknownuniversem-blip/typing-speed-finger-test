@@ -433,6 +433,9 @@
     .modal-card { max-width: 560px; }
   }
 </style>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <meta name="theme-color" content="#0F4C81">
 </head>
 <body>
 
@@ -2149,5 +2152,14 @@
     renderStreakBadge();
   });
 </script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+</script>
+
 </body>
 </html>
