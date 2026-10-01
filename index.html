@@ -468,6 +468,64 @@
   }
 </style>
 
+
+<style id="landscape-test-optimization">
+  /* Optimize test view specifically for landscape orientation */
+  @media (orientation: landscape) and (max-height: 550px) {
+    /* Compact top bar so it leaves maximum vertical room */
+    .test-header,
+    .top-bar,
+    .app-viewport > header {
+      min-height: 40px !important;
+      padding: 4px 14px !important;
+    }
+
+    /* Keep word prompt box compact and centered */
+    .words-display,
+    .word-box,
+    .prompt-card,
+    #words {
+      margin: 8px auto !important;
+      padding: 10px 14px !important;
+      font-size: 17px !important;
+      line-height: 1.5 !important;
+      max-height: 110px !important;
+      overflow-y: auto !important;
+    }
+
+    /* Compact typing bar with right-docked timer */
+    .input-bar-container,
+    .input-wrapper,
+    .typing-area {
+      margin: 6px auto !important;
+      height: 42px !important;
+    }
+
+    input[type="text"],
+    input.typing-input,
+    #wordInput {
+      height: 38px !important;
+      font-size: 16px !important;
+      padding: 0 10px !important;
+    }
+
+    .timer-badge,
+    .timer-display,
+    #timer {
+      padding: 6px 12px !important;
+      font-size: 15px !important;
+      min-width: 55px !important;
+    }
+
+    /* Push ads and footers completely out of view during test */
+    ins.adsbygoogle,
+    .ad-container,
+    footer {
+      display: none !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 
